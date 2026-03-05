@@ -1,0 +1,46 @@
+import re
+from nltk import WordNetLemmatizer
+from nltk.corpus import stopwords
+
+
+class TextPreprocessor:
+    """Handles cleaning, tokenization, and normalization of tweets."""
+
+    def __init__(self):
+        self.lemmatizer = WordNetLemmatizer()
+        self.stop_words = set(stopwords.words('english'))
+        # We keep 'not' and 'no' as they are critical for sentiment
+        self.stop_words = self.stop_words - {'not', 'no', 'never', 'neither', 'nor'}
+
+    def clean_text(self, text):
+        """Removes @user, URLs, hashtags, punctuation, and digits."""
+        # Lowercase
+        text = text.lower()
+        # Remove URLs
+        text = re.sub(r'http\S+|www\S+|https\S+', '', text, flags=re.MULTILINE)
+        # Remove @user handles
+        text = re.sub(r'\@\w+', '', text)
+        # Remove hashtags (keeps the word)
+        text = re.sub(r'#', '', text)
+        # Remove punctuation and digits
+        text = re.sub(r'[^a-z\s]', '', text)
+        return text
+
+    def tokenize_and_lemmatize(self, text):
+        """Tokenizes, removes stopwords, and lemmatizes."""
+        tokens = text.split()
+        processed = [
+            self.lemmatizer.lemmatize(word)
+            for word in tokens
+            if word not in self.stop_words
+        ]
+        return " ".join(processed)
+
+    def run(self, dataframe, text_column='text'):
+        """Applies the pipeline to the entire dataframe."""
+        print("Cleaning and Tokenizing tweets...")
+        dataframe['cleaned_text'] = dataframe[text_column].apply(self.clean_text)
+        dataframe['processed_text'] = dataframe['cleaned_text'].apply(self.tokenize_and_lemmatize)
+        # Drop empty strings after cleaning
+        dataframe = dataframe[dataframe['processed_text'].str.strip() != ""]
+        return dataframe
