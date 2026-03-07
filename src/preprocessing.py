@@ -1,7 +1,14 @@
 import re
-from nltk import WordNetLemmatizer
-from nltk.corpus import stopwords
 
+import nltk
+import re
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
+
+# Download necessary tools for the class
+nltk.download('stopwords')
+nltk.download('wordnet')
+nltk.download('omw-1.4')
 
 class TextPreprocessor:
     """Handles cleaning, tokenization, and normalization of tweets."""
@@ -38,9 +45,9 @@ class TextPreprocessor:
 
     def run(self, dataframe, text_column='text'):
         """Applies the pipeline to the entire dataframe."""
-        print("Cleaning and Tokenizing tweets...")
+        print("Preprocessing tweets... please wait.")
         dataframe['cleaned_text'] = dataframe[text_column].apply(self.clean_text)
         dataframe['processed_text'] = dataframe['cleaned_text'].apply(self.tokenize_and_lemmatize)
-        # Drop empty strings after cleaning
+        # Remove any rows that became empty after cleaning
         dataframe = dataframe[dataframe['processed_text'].str.strip() != ""]
         return dataframe

@@ -1,23 +1,28 @@
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.preprocessing import LabelEncoder
-import joblib
+from sklearn.model_selection import train_test_split
 
 class FeatureExtractor:
     """Handles TF-IDF vectorization and Label Encoding."""
 
     def __init__(self, max_features=5000):
-        self.tfidf = TfidfVectorizer(max_features=max_features)
+        # Initialize the TF-IDF vectorizer
+        self.vectorizer = TfidfVectorizer(max_features=max_features)
+        # Initialize the encoder for our target labels (Negative, Neutral, Positive)
         self.label_encoder = LabelEncoder()
 
-    def fit_transform(self, text_list, labels):
+    def fit_transform(self, dataframe, text_col='processed_text', label_col='airline_sentiment'):
         """Fits the vectorizer and encoder, then transforms the data."""
-        X = self.tfidf.fit_transform(text_list).toarray()
-        y = self.label_encoder.fit_transform(labels)
+        print(f"Extracting features from {text_col}...")
+
+        # 1. Transform text to numbers (Features)
+        X = self.vectorizer.fit_transform(dataframe[text_col]).toarray()
+
+        # 2. Transform labels to numbers (Targets)
+        y = self.label_encoder.fit_transform(dataframe[label_col])
+
         return X, y
 
-    def transform(self, text_list):
-        """Transforms new text using the already fitted vectorizer."""
-        return self.tfidf.transform(text_list).toarray()
-
     def get_input_dim(self):
-        return len(self.tfidf.get_feature_names_out())
+        # Tells the ANN how many input neurons it needs
+        return len(self.vectorizer.get_feature_names_out())
