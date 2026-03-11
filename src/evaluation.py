@@ -1,12 +1,18 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.metrics import classification_report, confusion_matrix
+import os
 
 class Evaluator:
     """Calculates F1, Precision, Recall and plots Confusion Matrix."""
 
-    def __init__(self, label_encoder):
+    def __init__(self, label_encoder, output_dir='Outputs'):
         self.label_encoder = label_encoder
+        self.output_dir = output_dir
+
+        # Ensure the Outputs folder exists
+        if not os.path.exists(self.output_dir):
+            os.makedirs(self.output_dir)
 
     def plot_loss_curve(self, train_losses, val_losses):
         plt.figure(figsize=(10, 6))
@@ -19,13 +25,23 @@ class Evaluator:
         plt.grid(True, linestyle='--', alpha=0.7)
         plt.show()
 
+        # Save the plot
+        save_path = os.path.join(self.output_dir, 'loss_curve.png')
+        plt.savefig(save_path)
+        print(f"Loss curve saved to: {save_path}")
+
     def display_metrics(self, y_true, y_pred):
         # Get the names of the classes (Negative, Neutral, Positive)
         class_names = self.label_encoder.classes_
 
         # 1. Classification Report (Precision, Recall, F1)
         print("\n--- Detailed Classification Report ---")
-        print(classification_report(y_true, y_pred, target_names=class_names))
+        report = classification_report(y_true, y_pred, target_names=class_names)
+        print(report)
+
+        # Save the report to a text file
+        with open(os.path.join(self.output_dir, 'classification_report.txt'), 'w') as f:
+            f.write(report)
 
         # 2. Confusion Matrix Heatmap
         cm = confusion_matrix(y_true, y_pred)
@@ -37,3 +53,8 @@ class Evaluator:
         plt.ylabel('Actual Sentiment')
         plt.xlabel('Predicted Sentiment')
         plt.show()
+
+        # Save the matrix
+        save_path = os.path.join(self.output_dir, 'confusion_matrix.png')
+        plt.savefig(save_path)
+        print(f"Confusion matrix saved to: {save_path}")
