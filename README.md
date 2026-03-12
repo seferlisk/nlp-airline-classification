@@ -57,5 +57,5 @@ To run this project, you will need:
 
 ## 🚦 Usage
 1.  **Clone the repository.**
-2.  Ensure `Tweets.csv` is in the root directory.
+2.  Ensure `Tweets.csv` is in the Datasets directory.
 3.  Run the `Sentiment_Analysis.ipynb` notebook to execute the pipeline from cleaning to evaluation.
