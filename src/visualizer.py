@@ -9,8 +9,8 @@ class Visualizer:
     def plot_sentiment_distribution(df):
         """Visualizes the class imbalance."""
         plt.figure(figsize=(8, 5))
-        sns.countplot(x='airline_sentiment', data=df, palette='viridis',
-                      order=['negative', 'neutral', 'positive'])
+        sns.countplot(x='airline_sentiment', data=df, hue = 'airline_sentiment',
+                      palette='magma', order=['negative', 'neutral', 'positive'])
         plt.title('Airline Sentiment Distribution (Raw Data)')
         plt.xlabel('Sentiment')
         plt.ylabel('Number of Tweets')
