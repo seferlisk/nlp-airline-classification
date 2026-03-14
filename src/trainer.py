@@ -4,7 +4,7 @@ import torch.optim as optim
 import os
 
 class ModelTrainer:
-    """Handles the training loop, Early Stopping, and Loss monitoring."""
+    """Handles the training loop, Early Stopping, Loss monitoring and ensures the best model state is preserved."""
 
     def __init__(self, model, lr=0.001, patience=5, output_dir='Outputs'):
         self.model = model
@@ -21,6 +21,7 @@ class ModelTrainer:
             print(f"Created directory: {self.output_dir}")
 
     def train(self, train_loader, val_loader, epochs=50):
+        """Iterates through epochs, calculating loss and updating weights via the Adam optimizer."""
         train_losses, val_losses = [], []
 
         # Define the full path for the .pth file

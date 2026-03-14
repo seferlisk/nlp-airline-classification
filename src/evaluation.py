@@ -15,6 +15,7 @@ class Evaluator:
             os.makedirs(self.output_dir)
 
     def plot_loss_curve(self, train_losses, val_losses):
+        """Generates a line graph comparing Training vs. Validation loss over time."""
         plt.figure(figsize=(10, 6))
         plt.plot(train_losses, label='Training Loss', color='blue', linewidth=2)
         plt.plot(val_losses, label='Validation Loss', color='orange', linewidth=2)
@@ -31,6 +32,9 @@ class Evaluator:
         print(f"Loss curve saved to: {save_path}")
 
     def display_metrics(self, y_true, y_pred):
+        """Generates a Classification Report (Precision, Recall, F1).
+           Creates a Confusion Matrix Heatmap to show misclassification trends.
+           Saves all outputs (images and text) to the Outputs/ directory for reporting."""
         # Get the names of the classes (Negative, Neutral, Positive)
         class_names = self.label_encoder.classes_
 

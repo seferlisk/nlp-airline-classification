@@ -1,7 +1,7 @@
 import torch.nn as nn
 
 class SentimentANN(nn.Module):
-    """The neural network architecture."""
+    """The neural network architecture that performs the classification."""
 
     def __init__(self, input_dim, hidden_dim=256, output_dim=3):
         super(SentimentANN, self).__init__()
