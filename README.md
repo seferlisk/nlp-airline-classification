@@ -52,6 +52,7 @@ To run this project, you will need:
 * `Pandas` / `Numpy`
 * `NLTK`
 * `Matplotlib` / `Seaborn`
+* `WordCloud`
 
 ---
 

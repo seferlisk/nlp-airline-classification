@@ -18,13 +18,20 @@ class TextPreprocessor:
         (no, not, never) to maintain sentiment integrity."""
         self.lemmatizer = WordNetLemmatizer()
         self.stop_words = set(stopwords.words('english'))
-        # We keep 'not' and 'no' as they are critical for sentiment
+
+        # Keep negation words as they are critical for sentiment
         self.stop_words = self.stop_words - {'not', 'no', 'never', 'neither', 'nor'}
+
+        # 2. ADD 'amp' and 'rt' to stopwords
+        self.stop_words.add('amp')
+        self.stop_words.add('rt')
 
     def clean_text(self, text):
         """Uses Regular Expressions (Regex) to strip @user, URLs, hashtags, punctuation, and digits."""
         # Lowercase
         text = text.lower()
+        # Handle the HTML entity specifically before punctuation removal
+        text = re.sub(r'&amp;', ' ', text)
         # Remove URLs
         text = re.sub(r'http\S+|www\S+|https\S+', '', text, flags=re.MULTILINE)
         # Remove @user handles
