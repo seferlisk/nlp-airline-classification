@@ -11,14 +11,17 @@ class ModelTrainer:
         self.criterion = nn.CrossEntropyLoss()
         self.optimizer = optim.Adam(model.parameters(), lr=lr)
         self.patience = patience
-        self.output_dir = output_dir  # The folder name
+        self.root_dir = os.path.abspath(os.path.join(os.getcwd(), ".."))
+        self.output_dir = os.path.join(self.root_dir, output_dir)
         self.best_val_loss = float('inf')
         self.counter = 0
 
-        # Ensure the Outputs folder exists immediately
+        # Ensure the Outputs folder exists
         if not os.path.exists(self.output_dir):
             os.makedirs(self.output_dir)
             print(f"Created directory: {self.output_dir}")
+
+        self.save_path = os.path.join(self.output_dir, 'best_model_weights.pth')
 
     def train(self, train_loader, val_loader, epochs=50):
         """Iterates through epochs, calculating loss and updating weights via the Adam optimizer."""

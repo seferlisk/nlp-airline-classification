@@ -8,7 +8,8 @@ class Evaluator:
 
     def __init__(self, label_encoder, output_dir='Outputs'):
         self.label_encoder = label_encoder
-        self.output_dir = output_dir
+        self.root_dir = os.path.abspath(os.path.join(os.getcwd(), ".."))
+        self.output_dir = os.path.join(self.root_dir, output_dir)
 
         # Ensure the Outputs folder exists
         if not os.path.exists(self.output_dir):
@@ -24,12 +25,13 @@ class Evaluator:
         plt.ylabel('Cross Entropy Loss')
         plt.legend()
         plt.grid(True, linestyle='--', alpha=0.7)
-        plt.show()
 
         # Save the plot
         save_path = os.path.join(self.output_dir, 'loss_curve.png')
         plt.savefig(save_path)
         print(f"Loss curve saved to: {save_path}")
+
+        plt.show()
 
     def display_metrics(self, y_true, y_pred):
         """Generates a Classification Report (Precision, Recall, F1).
@@ -56,9 +58,11 @@ class Evaluator:
         plt.title('Confusion Matrix: Predicted vs Actual')
         plt.ylabel('Actual Sentiment')
         plt.xlabel('Predicted Sentiment')
-        plt.show()
 
         # Save the matrix
         save_path = os.path.join(self.output_dir, 'confusion_matrix.png')
         plt.savefig(save_path)
         print(f"Confusion matrix saved to: {save_path}")
+
+        plt.show()
+
