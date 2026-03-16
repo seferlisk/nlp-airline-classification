@@ -26,11 +26,29 @@ The goal is to analyze customer feedback on Twitter to help airlines understand 
 ---
 
 ## 📁 Project Structure
-* `Tweets.csv`: The raw dataset containing ~14.6k labeled tweets.
-* `Sentiment_Analysis.ipynb`: The main Jupyter Notebook containing the full analysis and training pipeline.
-* `best_model_weights.pth`: The saved weights from the best training epoch.
-* `Outputs/`: Directory containing generated plots and reports.
+* The project follows a modular package structure to ensure separation of concerns and reusability.
 
+```text
+my-project/
+├── Datasets/                     # Raw data files (Tweets.csv)
+├── notebooks/                    # Jupyter Notebook for experimentation
+    └── `Sentiment_Analysis.ipynb`: The main Jupyter Notebook containing the full 
+                                    analysis and training pipeline.
+├── Outputs/                      # Generated plots, weights, and processed data
+└── src/                          # Source code package
+    └── airline_sentiment/    
+        ├── __init__.py           # Package entry point
+        ├── data/                 # Text cleaning and CSV management
+        │   └── preprocessing.py
+        ├── features/             # TF-IDF and feature engineering
+        │   └── extractor.py
+        ├── models/               # ANN architecture and training logic
+        │   ├── ann.py
+        │   └── trainer.py
+        └── evaluation/           # EDA and performance metrics
+            ├── visualizer.py
+            └── evaluator.py
+```
 ---
 
 ## 📊 Performance Metrics
