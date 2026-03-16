@@ -1,5 +1,4 @@
-import re
-
+import os
 import nltk
 import re
 from nltk.corpus import stopwords
@@ -13,9 +12,18 @@ nltk.download('omw-1.4')
 class TextPreprocessor:
     """Handles cleaning, tokenization, and normalization of tweets."""
 
-    def __init__(self):
+    def __init__(self, folder_name='Datasets'):
         """Initializes the NLTK Lemmatizer and defines a custom stopword list that preserves negation words
         (no, not, never) to maintain sentiment integrity."""
+
+        # Pathing: Go up one level from 'notebooks/' to Root
+        self.root_dir = os.path.abspath(os.path.join(os.getcwd(), ".."))
+        self.output_dir = os.path.join(self.root_dir, folder_name)
+
+        # Ensure the folder exists
+        if not os.path.exists(self.output_dir):
+            os.makedirs(self.output_dir)
+
         self.lemmatizer = WordNetLemmatizer()
         self.stop_words = set(stopwords.words('english'))
 
@@ -60,3 +68,13 @@ class TextPreprocessor:
         # Remove any rows that became empty after cleaning
         dataframe = dataframe[dataframe['processed_text'].str.strip() != ""]
         return dataframe
+
+    def save_data(self, df, filename='preprocessed_tweets.csv'):
+        """Saves the processed dataframe to the Datasets folder in the root."""
+        save_path = os.path.join(self.output_dir, filename)
+
+        # We only save the columns we need for future modeling to keep the file small
+        cols_to_keep = ['airline_sentiment', 'processed_text', 'airline']
+        df[cols_to_keep].to_csv(save_path, index=False)
+
+        print(f"✅ Preprocessed dataset saved to: {save_path}")
