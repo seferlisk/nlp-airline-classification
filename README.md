@@ -32,7 +32,7 @@ The goal is to analyze customer feedback on Twitter to help airlines understand 
 my-project/
 ├── Datasets/                     # Raw data files (Tweets.csv)
 ├── notebooks/                    # Jupyter Notebook for experimentation
-    └── `Sentiment_Analysis.ipynb`: The main Jupyter Notebook containing the full 
+    └── `analysis.ipynb`: The main Jupyter Notebook containing the full 
                                     analysis and training pipeline.
 ├── Outputs/                      # Generated plots, weights, and processed data
 └── src/                          # Source code package
